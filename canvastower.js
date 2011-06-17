@@ -97,8 +97,16 @@ CanvasTower.prototype.startGame = function(){
 		}
 	}
 	this.enemyMove = startCoords;
-	this._moveSoldier();
+	this.ticker = this.timekeeper.addListener(this, "_animationManager", 2 );
+	
+	
+	/*-this._moveSoldier();-*/
 };
+
+CanvasTower.prototype._animationManager = function(){
+	console.log(arguments);
+};
+
 /**
  * hledac cesty
  **/
@@ -294,7 +302,11 @@ CanvasTower.prototype._move = function(e, elm){
 		this.contextPlace.stroke();
 	}
 }
+CanvasTower.prototype._removeTicker = function(e, elm){
+	this.timekeeper.removeListener(this.ticker);
+};
 CanvasTower.prototype._link = function(){
 	this.ec.push( JAK.Events.addListener(this.dom.canvasPlace, 'click', this, '_placeTower') );
 	this.ec.push( JAK.Events.addListener(this.dom.canvasPlace, 'mousemove', this, '_move') );
+	this.ec.push( JAK.Events.addListener(window, 'unload', this, '_removeTicker') );
 };
