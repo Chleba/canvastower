@@ -17,6 +17,7 @@ CanvasTower.Enemy['SOLDIER'] = {
 	width:16,
 	height:21,
 	hp:100,
+	interval : 1000,
 	img : { right : JAK.mel('img', { src:'./img/elf1.png' }), down : JAK.mel('img', { src:'./img/elf.png' }), up : JAK.mel('img', {src:'./img/elf2.png'}) }
 };
 /**
@@ -86,7 +87,7 @@ CanvasTower.prototype._buildSoldiers = function(){
  * Start hry
  **/
 CanvasTower.prototype.startGame = function(){
-	var startCoords = {direction : '', coords : [] };
+	var startCoords = {direction : '', coords : [], time : new Date().getTime() };
 	for(var i=0;i<this.MAP.length;i++){
 		for(var j=0;j<this.MAP[i].length;j++){
 			if(this.MAP[i][j] == 'start'){
@@ -97,14 +98,25 @@ CanvasTower.prototype.startGame = function(){
 		}
 	}
 	this.enemyMove = startCoords;
-	this.ticker = this.timekeeper.addListener(this, "_animationManager", 2 );
-	
+	this.ticker = this.timekeeper.addListener(this, "_animationManager", 1 );
 	
 	/*-this._moveSoldier();-*/
 };
 
 CanvasTower.prototype._animationManager = function(){
-	console.log(arguments);
+	var time = new Date().getTime();
+	if(this.enemyMove.time < time){
+		if(this.moveEndCoords){
+			this._finnishMove();
+		}
+		var coords = this._whereTo(this.enemyMove);
+		if(coords){
+			this._animateSoldier(coords);
+		}
+	} else {
+		var num = ((this.moveEndCoords.time-time)/this.enemy.interval)-1;
+		this._posSoldier(num);
+	}
 };
 
 /**
@@ -152,6 +164,7 @@ CanvasTower.prototype._whereTo = function(coords){
 		    } else if(goCoords[i].direction == 'up' && this.enemyMove.direction == 'down'){
 		        continue;
 		    } else {
+				goCoords[i].time = new Date().getTime()+this.enemy.interval;
 				return goCoords[i];
 				break;
 			}
@@ -175,6 +188,7 @@ CanvasTower.prototype._moveSoldier = function(){
  * animace a pocitani pozice
  **/
 CanvasTower.prototype._posSoldier = function(num){
+	console.log(num);
 	/*- podklad predchozi -*/
 	var rectPos = [this.enemyMove.coords[1]*this.canvasPointWidth, this.enemyMove.coords[0]*this.canvasPointHeight];
 	if(CanvasTower.Konstant[this.MAP[this.enemyMove.coords[0]][this.enemyMove.coords[1]]].img){
@@ -257,7 +271,7 @@ CanvasTower.prototype._endShoot = function(){
  **/
 CanvasTower.prototype._finnishMove = function(){
 	this.enemyMove = this.moveEndCoords;
-	this._moveSoldier();
+	/*-this._moveSoldier();-*/
 };
 /**
  * start interpolace
@@ -268,8 +282,10 @@ CanvasTower.prototype._animateSoldier = function(coords){
 	this.endLeftPos = this.moveEndCoords.coords[1]*this.canvasPointWidth;
 	this.startTopPos = this.enemyMove.coords[0]*this.canvasPointHeight;
 	this.endTopPos = this.moveEndCoords.coords[0]*this.canvasPointHeight;
+	/*-
 	var interpolator = new JAK.Interpolator( 0, 1, this.interval, this._posSoldier.bind(this), { endCallback:this._finnishMove.bind(this) } );
 	interpolator.start();
+	-*/ 
 };
 CanvasTower.prototype._getCoords = function(e){
 	var boxpos = JAK.DOM.getBoxPosition(this.dom.canvasMap);
@@ -303,7 +319,7 @@ CanvasTower.prototype._move = function(e, elm){
 	}
 }
 CanvasTower.prototype._removeTicker = function(e, elm){
-	this.timekeeper.removeListener(this.ticker);
+	this.timekeeper.removeListener(this);
 };
 CanvasTower.prototype._link = function(){
 	this.ec.push( JAK.Events.addListener(this.dom.canvasPlace, 'click', this, '_placeTower') );
