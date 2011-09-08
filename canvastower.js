@@ -98,7 +98,7 @@ CanvasTower.prototype.startGame = function(){
 		}
 	}
 	this.enemyMove = startCoords;
-	this.ticker = this.timekeeper.addListener(this, "_animationManager", 1 );
+	this.ticker = this.timekeeper.addListener(this, "_animationManager", 2 );
 	
 	/*-this._moveSoldier();-*/
 };
@@ -106,15 +106,15 @@ CanvasTower.prototype.startGame = function(){
 CanvasTower.prototype._animationManager = function(){
 	var time = new Date().getTime();
 	if(this.enemyMove.time < time){
-		if(this.moveEndCoords){
-			this._finnishMove();
-		}
 		var coords = this._whereTo(this.enemyMove);
 		if(coords){
 			this._animateSoldier(coords);
 		}
+		if(this.moveEndCoords){
+			this._finnishMove();
+		}
 	} else {
-		var num = ((this.moveEndCoords.time-time)/this.enemy.interval)-1;
+		var num = (((this.moveEndCoords.time-this.enemy.interval)-time)/this.enemy.interval*-1);
 		this._posSoldier(num);
 	}
 };
@@ -188,7 +188,6 @@ CanvasTower.prototype._moveSoldier = function(){
  * animace a pocitani pozice
  **/
 CanvasTower.prototype._posSoldier = function(num){
-	console.log(num);
 	/*- podklad predchozi -*/
 	var rectPos = [this.enemyMove.coords[1]*this.canvasPointWidth, this.enemyMove.coords[0]*this.canvasPointHeight];
 	if(CanvasTower.Konstant[this.MAP[this.enemyMove.coords[0]][this.enemyMove.coords[1]]].img){
