@@ -33,7 +33,7 @@ CanvasTower.prototype.$constructor = function(canvasMap, canvasPlace){
 	/*- souradnice nepritele -*/
 	this.enemyMove = { direction : '', coords : [0,0] };
 	/*- rozvrzeni mapy -*/
-	this.MAP = [
+	/*this.MAP = [
 		['start' ,'road'  , 'road' , 'place' , 'place' , 'place' , 'place' , 'place' , 'place' , 'none' ],
 		['none'  ,'place' , 'road' , 'place' , 'road'  , 'road'  , 'road'  , 'road'  , 'place' , 'none' ],
 		['none'  ,'place' , 'road' , 'place' , 'road'  , 'place' , 'place' , 'road'  , 'place' , 'none' ],
@@ -44,8 +44,8 @@ CanvasTower.prototype.$constructor = function(canvasMap, canvasPlace){
 		['none'  ,'place' , 'road' , 'place' , 'road'  , 'place' , 'place' , 'road'  , 'place' , 'none' ],
 		['none'  ,'place' , 'road' , 'road'  , 'road'  , 'place' , 'place' , 'road'  , 'road'  , 'end'  ],
 		['none'  ,'none'  , 'none' , 'none'  , 'none'  , 'none'  , 'none'  , 'none'  , 'none'  , 'none' ]
-	];
-	/*-this.MAP = [[ 'start', 'road', 'road', 'road','road','road','road','road','road','end' ]]-*/
+	];*/
+	this.MAP = [[ 'start', 'road', 'road', 'road','road','road','road','road','road','end' ]];
 	this.dom = {};
 	this.ec = [];
 	this.dom.canvasMap = JAK.gel(canvasMap);
