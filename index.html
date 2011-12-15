@@ -5,13 +5,14 @@
 		<link rel="shortcut icon" href="/img/favicon.ico" />
 		<link rel="icon" href="/img/favicon.ico" />
 		<title>canvas tower defense</title>
-		<link rel="stylesheet" href="./style.css" type="text/css" />
+		<!---<link rel="stylesheet" href="./style.css" type="text/css" />--->
 	</head>
 	<body>
 	    <script type="text/javascript" src="./jak.js"></script>
-	    <script type="text/javascript" src="./interpolator.js"></script>
 	    <script type="text/javascript" src="./timekeeper.js"></script>
 	    <script type="text/javascript" src="./canvastower.js"></script>
+	    <script type="text/javascript" src="./map.js"></script>
+	    <script type="text/javascript" src="./soldier.js"></script>
 		<style>
 			#canvasMain 	{ position:relative; }
 			#canvasMain canvas	{ display:block; position:absolute; top:0px; left:0px; }
@@ -19,12 +20,13 @@
 		<div id="page">
 			
 			<div id="canvasMain">
-				<canvas id="canvasMap" width="500" height="500" style="margin-left:250px;"></canvas>
-				<canvas id="canvasPlace" width="500" height="500" style="margin-left:250px;"></canvas>
+				<canvas id="canvasMap" width="500" height="380" style="margin-left:250px;"></canvas>
+				<canvas id="canvasPlace" width="500" height="380" style="margin-left:250px;"></canvas>
 			</div>
 			
 			<script>
-				var canvasTower = new CanvasTower('canvasMap', 'canvasPlace');
+				//var canvasTower = new CanvasTower('canvasMap', 'canvasPlace');
+				var canvasTower = new CanvasTower();
 			</script>
 			
 		</div>
