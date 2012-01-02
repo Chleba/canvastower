@@ -28,13 +28,15 @@ CTD.START = 2;
 CTD.END = 3;
 CTD.NPC = 4;
 CTD.NONE = 5;
+CTD.CANNON = 6;
 
 CTD.IMG = {};
-CTD.IMG[CTD.WALL] = { img : './img/t-cave-stalagmit.png', color : '#000' };
-CTD.IMG[CTD.NONE] = { img : './img/t-cave-stalagmit.png', color : '#000' };
-CTD.IMG[CTD.ROAD] = { img : './img/t-cave.png', color : '#ccc' };
+CTD.IMG[CTD.WALL] = { img : './img/t-lava-pool.png', color : '#000' };
+CTD.IMG[CTD.NONE] = { img : './img/t-lava.png', color : '#000' };
+CTD.IMG[CTD.ROAD] = { img : './img/place.png', color : '#ccc' };
 CTD.IMG[CTD.START] = { img : './img/t-lava.png', color : 'green' };
 CTD.IMG[CTD.END] = { img : './img/t-lava.png', color : 'red' };
+CTD.IMG[CTD.CANNON] = { img : './img/kanon.png', color : 'red' };
 CTD.IMG[CTD.NPC] = {
 	img : './img/capeman.png',
 	up : 96,
@@ -128,11 +130,12 @@ CanvasTower.prototype.startGame = function(){
 	this.map = new CanvasTower.Map(CanvasTower.MAP, this);
 	this.map.draw();
 	//try{ new CanvasTower.Soldier(this) } catch(e){ console.log(e); }
+	this.cannons = [];
 	this.npcs = [
+		/*new CanvasTower.Soldier(this),
 		new CanvasTower.Soldier(this),
 		new CanvasTower.Soldier(this),
-		new CanvasTower.Soldier(this),
-		new CanvasTower.Soldier(this),
+		new CanvasTower.Soldier(this),*/
 		new CanvasTower.Soldier(this)
 	];
 	this.ticker = this.timekeeper.addListener(this, 'animationManager', 2);
@@ -146,8 +149,12 @@ CanvasTower.prototype.animationManager = function(){
 	var d = new Date().getTime();
 	this.clearCanvas();
 	this.map.draw();
-	
+	/*- pohyb npc -*/
 	this._npcMove();
+	/*- strelba kanonu -*/
+	for(var i=0;i<this.cannons.length;i++){
+		this.cannons[i].check();
+	}
 };
 
 CanvasTower.prototype._npcMove = function(){
@@ -167,19 +174,28 @@ CanvasTower.prototype.gameOver = function(){
 
 CanvasTower.prototype._getCoords = function(e){
 	var boxpos = JAK.DOM.getBoxPosition(this.dom.canvasMap);
-	var clickPos = [ e.clientY-boxpos.top, e.clientX-boxpos.left ];
-	var ct = Math.floor(clickPos[0]/this.mapPointSize.w);
-	var cl = Math.floor(clickPos[1]/this.mapPointSize.h);
+	var clickPos = [ e.clientY-boxpos.top, e.clientX-boxpos.left ];	
+	var ct = Math.floor(clickPos[0]/this.mapPointSize.h);
+	var cl = Math.floor(clickPos[1]/this.mapPointSize.w);
 	var type = CanvasTower.MAP[ct][cl];
 	return { type : type, coords : [ct, cl] };
 };
 
 CanvasTower.prototype._mouseMove = function(e, elm){
 	var c = this._getCoords(e);
-	console.log(c);
+	this.mouseCoords = c;
+};
+
+CanvasTower.prototype._mouseClick = function(e, elm){
+	var c = this._getCoords(e);
+	if(c.type == CTD.WALL){
+		CanvasTower.MAP[c.coords[0]][c.coords[1]] = CTD.CANNON;
+		this.cannons.push(new CanvasTower.Cannon(this, c.coords));
+	}
 };
 
 CanvasTower.prototype._link = function(){
 	this.ec.push( JAK.Events.addListener(this.dom.canvasPlace, 'mousemove', this, '_mouseMove') );
+	this.ec.push( JAK.Events.addListener(this.dom.canvasPlace, 'click', this, '_mouseClick') );
 };
 

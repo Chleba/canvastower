@@ -54,7 +54,6 @@ CanvasTower.Soldier.prototype.move = function(){
 		this.pxcoords = this._pxPos(this.coords);
 		var coords = this._whereTo(this.coords);
 		this.coords = coords;
-		console.log(this.coords);
 		if(this.map[coords[0]][coords[1]] == CTD.END){
 			this.ct.gameOver();
 		}
@@ -73,6 +72,7 @@ CanvasTower.Soldier.prototype._animate = function(num){
 	var solLeft = ((pxEnd.x-this.pxcoords.x)*num)+this.pxcoords.x;
 	var solTop = ((pxEnd.y-this.pxcoords.y)*num)+this.pxcoords.y;
 	
+	this.actualPos = { x : solLeft, y : solTop };
 	
 	var sy = this.spriteOpt[this.direction].top; /* vyskovy zacatek */
 	var height = this.spriteOpt[this.direction].height; /* vyska vyrezu */
@@ -81,7 +81,7 @@ CanvasTower.Soldier.prototype._animate = function(num){
 	var index = Math.floor(delta / this.spriteOpt.interval) % 3;
 	var sx = index*this.spriteOpt.step; /* sirkovy zacatek zleva */
 	
-	this.ct.canvasMap.drawImage(CTD.IMG[CTD.NPC].img, sx, sy, this.spriteOpt.step, height, solLeft, solTop, this.spriteOpt.step, height);
+	this.ct.canvasMap.drawImage(CTD.IMG[CTD.NPC].img, sx, sy, this.spriteOpt.step, height, solLeft, solTop, this.spriteOpt.step/1.5, height/1.5);
 	
 	//var soldier = this.ct.canvasMap.drawImage(CTD.IMG[CTD.NPC].img, solLeft, solTop);
 };
