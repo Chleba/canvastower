@@ -20,7 +20,7 @@ CanvasTower.Map.prototype.draw = function(){
 		}
 	}
 	
-	if(this.ct.mouseCoords && this.ct.mouseCoords.type == CTD.WALL){
+	if(this.ct.mouseCoords && (this.ct.mouseCoords.type == CTD.WALL || this.ct.mouseCoords.type == CTD.CANNON)){
 		this.ct.canvasMap.beginPath();
 		var mc = this.ct.mouseCoords.coords || [];
 		var ax = (mc[1]*mpw)+(mpw/2);

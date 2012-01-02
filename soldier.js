@@ -8,6 +8,7 @@ CanvasTower.Soldier.prototype.$constructor = function(owner){
 	this.ct = owner;
 	this.coords = [];
 	this.pxcoords = {};
+	this.actualPos = { x : 0, y : 0 };
 	this.direction = RPG.S;
 	this.HP = 100;
 	this.interval = 1000;

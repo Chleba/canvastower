@@ -132,10 +132,10 @@ CanvasTower.prototype.startGame = function(){
 	//try{ new CanvasTower.Soldier(this) } catch(e){ console.log(e); }
 	this.cannons = [];
 	this.npcs = [
-		/*new CanvasTower.Soldier(this),
 		new CanvasTower.Soldier(this),
 		new CanvasTower.Soldier(this),
-		new CanvasTower.Soldier(this),*/
+		new CanvasTower.Soldier(this),
+		new CanvasTower.Soldier(this),
 		new CanvasTower.Soldier(this)
 	];
 	this.ticker = this.timekeeper.addListener(this, 'animationManager', 2);
