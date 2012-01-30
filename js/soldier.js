@@ -1,4 +1,8 @@
 
+function numRange(min, max){
+	return ((Math.random()*(max-min)) + min);
+}
+
 CanvasTower.Soldier = JAK.ClassMaker.makeClass({
 	NAME : 'CanvasTower.Soldier',
 	VERSION : '1.0'
@@ -24,7 +28,9 @@ CanvasTower.Soldier.prototype.$constructor = function(owner){
 	this.spriteOpt[RPG.W] = { top :32, height : 32 };
 	this.spriteOpt[RPG.E] = { top : 64, height : 32 };
 	this.spriteOpt[RPG.S] = { top : 0, height : 32 };
+	this.randNum = numRange(0, 20);
 	this._posOnStart();
+	
 };
 
 CanvasTower.Soldier.prototype._posOnStart = function(){
@@ -44,7 +50,7 @@ CanvasTower.Soldier.prototype._posOnStart = function(){
 CanvasTower.Soldier.prototype._pxPos = function(coords){
 	var x = coords[1]*this.ct.mapPointSize.w;
 	var y = coords[0]*this.ct.mapPointSize.h;
-	return { x : x, y : y };
+	return { x : x+this.randNum, y : y+this.randNum };
 };
 
 CanvasTower.Soldier.prototype.move = function(){
@@ -83,7 +89,6 @@ CanvasTower.Soldier.prototype._animate = function(num){
 	var sx = index*this.spriteOpt.step; /* sirkovy zacatek zleva */
 	
 	this.ct.canvasMap.drawImage(CTD.IMG[CTD.NPC].img, sx, sy, this.spriteOpt.step, height, solLeft, solTop, this.spriteOpt.step/1.5, height/1.5);
-	
 	//var soldier = this.ct.canvasMap.drawImage(CTD.IMG[CTD.NPC].img, solLeft, solTop);
 };
 

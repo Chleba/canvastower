@@ -141,9 +141,9 @@ CanvasTower.Cannon.SHOT.prototype.update = function(){
 		posY : this.posY,
 		gravity : 0,
 		alpha : 0.5,
-		size : 1,
-		shrink : 0.96,
-		life : 500,
+		size : 1.2,
+		shrink : 0.94,
+		life : 200,
 		canvas : this.opt.canvas,
 		img : this.img
 	}));
