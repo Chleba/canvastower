@@ -161,8 +161,12 @@ CanvasTower.prototype._npcMove = function(){
 	var delta = new Date().getTime() - this.startTime;
 	var index = Math.floor(delta / 1000);
 	for(var i=0;i<this.npcs.length;i++){
-		if(i < index){
-			this.npcs[i].move();
+		if(this.npcs[i].alive == 0){
+			this.npcs.splice(i, 1);
+		} else {
+			if(i < index){
+				this.npcs[i].move();
+			}
 		}
 	}
 };

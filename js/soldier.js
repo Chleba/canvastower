@@ -9,12 +9,13 @@ CanvasTower.Soldier = JAK.ClassMaker.makeClass({
 });
 
 CanvasTower.Soldier.prototype.$constructor = function(owner){
+	this.alive = 1;
 	this.ct = owner;
 	this.coords = [];
 	this.pxcoords = {};
 	this.actualPos = { x : 0, y : 0 };
 	this.direction = RPG.S;
-	this.HP = 100;
+	this.HP = 10;
 	this.interval = 1000;
 	this.map = CanvasTower.MAP;
 	this.startTime = new Date().getTime();
@@ -30,7 +31,23 @@ CanvasTower.Soldier.prototype.$constructor = function(owner){
 	this.spriteOpt[RPG.S] = { top : 0, height : 32 };
 	this.randNum = numRange(0, 20);
 	this._posOnStart();
-	
+};
+
+CanvasTower.Soldier.prototype.$destructor = function(){
+	for(var p in this){
+		this[p] = null;
+	}
+};
+
+CanvasTower.Soldier.prototype.dmg = function(dmg){
+	this.HP -= dmg;
+	if(this.HP < 0){
+		this.death();
+	}
+};
+
+CanvasTower.Soldier.prototype.death = function(){
+	this.alive = 0;
 };
 
 CanvasTower.Soldier.prototype._posOnStart = function(){

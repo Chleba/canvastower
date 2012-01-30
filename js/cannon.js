@@ -26,7 +26,9 @@ CanvasTower.Cannon.prototype.shoot = function(npc){
 		this.shoots.push(new CanvasTower.Cannon.SHOT({
 			canvas : this.ct.canvasMap,
 			from : from,
-			to : npc.actualPos
+			to : npc.actualPos,
+			npc : npc,
+			dmg : 5
 		}));
 	}
 };
@@ -49,8 +51,7 @@ CanvasTower.Cannon.prototype.check = function(){
 		
 		if(r <= (ps.w+ps.w/1.5)){
 			this.shoot(npc[i]);
-			//continue;
-			//break;
+			break;
 			//return;
 			/*canvas.beginPath();
 			canvas.lineWidth = 2;
@@ -65,7 +66,7 @@ CanvasTower.Cannon.prototype.check = function(){
 
 CanvasTower.Cannon.prototype._animateShots = function(){
 	for(var i=0;i<this.shoots.length;i++){
-		if(this.shoots[i].opt == null){
+		if(this.shoots[i].alive == 0){
 			this.shoots.splice(i, 1);
 		} else {
 			this.shoots[i].draw();
@@ -87,12 +88,15 @@ CanvasTower.Cannon.SHOT = JAK.ClassMaker.makeClass({
 	VERSION : '1.0'
 });
 CanvasTower.Cannon.SHOT.prototype.$constructor = function(opt){
+	this.alive = 1;
 	this.particles = [];
 	this.opt = {
 		canvas : null,
 		from : { x : 0, y : 0 },
 		to : { x : 0, y : 0 },
 		life : 500,
+		dmg : 5,
+		npc : null,
 		img : new Image()
 	}
 	this.opt.img.src = './img/strela.png';
@@ -116,6 +120,11 @@ CanvasTower.Cannon.SHOT.prototype.$constructor = function(opt){
 	this.y = b - this.posY;
 };
 CanvasTower.Cannon.SHOT.prototype.$destructor = function(){
+	/*- zraneni -*/
+	if(this.opt.npc.dmg){
+		this.opt.npc.dmg(this.opt.dmg);
+	}
+	/*- destroy myself -*/
 	for(var p in this){
 		this[p] = null;
 	}
@@ -129,10 +138,16 @@ CanvasTower.Cannon.SHOT.prototype.update = function(){
 	//console.log(this.posY+' --- '+this.opt.to.y);
 	
 	if(((this.opt.from.x < this.opt.to.x) && (this.posX > this.opt.to.x)) || ((this.opt.from.y < this.opt.to.y) && (this.posY > this.opt.to.y)) ){
-		this.$destructor();
+		this.alive = 0;
+		if(this.opt.npc.alive){
+			this.opt.npc.dmg(this.opt.dmg);
+		}
 		return;
 	} else if(((this.opt.from.x > this.opt.to.x) && (this.posX < this.opt.to.x)) || ((this.opt.from.y > this.opt.to.y) && (this.posY < this.opt.to.y)) ){
-		this.$destructor();
+		this.alive = 0;
+		if(this.opt.npc.alive){
+			this.opt.npc.dmg(this.opt.dmg);
+		}
 		return;
 	}
 	
