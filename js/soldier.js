@@ -41,7 +41,7 @@ CanvasTower.Soldier.prototype.$destructor = function(){
 
 CanvasTower.Soldier.prototype.dmg = function(dmg){
 	this.HP -= dmg;
-	if(this.HP < 0){
+	if(this.HP <= 0){
 		this.death();
 	}
 };

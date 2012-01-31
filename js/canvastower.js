@@ -131,6 +131,7 @@ CanvasTower.prototype.startGame = function(){
 	this.map.draw();
 	//try{ new CanvasTower.Soldier(this) } catch(e){ console.log(e); }
 	this.cannons = [];
+	this.startTime = new Date().getTime();
 	this.npcs = [
 		new CanvasTower.Soldier(this),
 		new CanvasTower.Soldier(this),
@@ -147,6 +148,13 @@ CanvasTower.prototype.clearCanvas = function(){
 
 CanvasTower.prototype.animationManager = function(){
 	var d = new Date().getTime();
+	var sd = this.startTime-d;
+	if((Math.floor(sd/1000) % 3) == 0){
+		for(var i=0;i<9;i++){
+			this.npcs.push(new CanvasTower.Soldier(this));
+		}
+	}
+	
 	this.clearCanvas();
 	this.map.draw();
 	/*- pohyb npc -*/
