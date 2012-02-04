@@ -21,29 +21,32 @@ CanvasTower.Map.prototype.draw = function(){
 	}
 	
 	if(this.ct.mouseCoords && (this.ct.mouseCoords.type == CTD.WALL || this.ct.mouseCoords.type == CTD.CANNON)){
-		this.ct.canvasMap.save();
-		this.ct.canvasMap.beginPath();
 		var mc = this.ct.mouseCoords.coords || [];
 		var ax = (mc[1]*mpw)+(mpw/2);
 		var ay = (mc[0]*mph)+(mph/2);
-		this.ct.canvasMap.lineWidth = 8;
-		this.ct.canvasMap.strokeStyle = '#333';
-		this.ct.canvasMap.arc(ax, ay, mpw+(mpw/2), 0, Math.PI*2, true);
-		this.ct.canvasMap.closePath();
-		this.ct.canvasMap.stroke();
-		this.ct.canvasMap.restore();
-		
-		this.ct.canvasMap.beginPath();
 		this.ct.canvasMap.save();
-		//this.ct.canvasMap.strokeStyle = 'rgba(0, 0, 0, 0.3)';
-		//this.ct.canvasMap.shadowColor = '#000';
-		//this.ct.canvasMap.shadowBlur = 5;
-		this.ct.canvasMap.arc(ax, ay, mpw+(mpw/2), 0, Math.PI*2, true);
-		this.ct.canvasMap.lineWidth = 4;
-		this.ct.canvasMap.strokeStyle = '#000';
-		this.ct.canvasMap.closePath();
-		this.ct.canvasMap.stroke();
-		this.ct.canvasMap.restore();
+		
+		this._lines = [
+			{width: 18, opacity:0.1, color: "rgba(0,255,0,0.1)"},
+			{width: 14, opacity:0.2, color: "rgba(0,255,0,0.2)"},
+			{width: 10, opacity:0.3, color: "rgba(0,255,0,0.3)"},
+			{width: 6, opacity:1, color: "rgba(0,255,0,1)"},
+			{width: 2, color: "rgb(255,255,255)"}
+		];
+		
+		for(var i=0;i<this._lines.length;i++){
+			this.ct.canvasMap.save();
+			this.ct.canvasMap.beginPath();
+			this.ct.canvasMap.lineWidth = this._lines[i].width;
+			//this.ct.canvasMap.strokeStyle = 'rgba(100, 100, 100, 0.'+i+')';
+			//var styleStr = 'rgba('+(i*11)+', '+(i*11)+', '+(i*11)+', 0.'+(9-i)+')';
+			var styleStr = this._lines[i].color;
+			this.ct.canvasMap.strokeStyle = styleStr;
+			this.ct.canvasMap.arc(ax, ay, mpw+(mpw/2), 0, Math.PI*2, true);
+			this.ct.canvasMap.closePath();
+			this.ct.canvasMap.stroke();
+			this.ct.canvasMap.restore();
+		}
 	}
 	
 };
